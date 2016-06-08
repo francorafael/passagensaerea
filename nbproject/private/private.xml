@@ -4,8 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/RAFAEL/TOLEDO/ProjetosNETBeans/PassagensToledo/src/java/br/passagens/Servlet/SrvPassagem.java</file>
-            <file>file:/E:/RAFAEL/TOLEDO/ProjetosNETBeans/PassagensToledo/src/java/br/passagens/DAO/VooDAO.java</file>
             <file>file:/E:/RAFAEL/TOLEDO/ProjetosNETBeans/PassagensToledo/web/index.jsp</file>
+            <file>file:/E:/RAFAEL/TOLEDO/ProjetosNETBeans/PassagensToledo/web/selecionar.jsp</file>
+            <file>file:/E:/RAFAEL/TOLEDO/ProjetosNETBeans/PassagensToledo/src/java/classes/Passagens.java</file>
         </group>
     </open-files>
 </project-private>

@@ -63,9 +63,12 @@ public class SrvCliente extends HttpServlet {
                             request.getSession().setAttribute("mensagem", msg);
                             if(dao.logar(cli.getEmail(), cli.getSenha()) != null)
                             {
-                               request.getSession().setAttribute("usuario", cli.getNome());
+                               request.getSession().setAttribute("usuario", cli.getNome());                               
+                               request.getSession().setAttribute("idusuario", cli.getId());
+
                             } else {
                                 request.getSession().setAttribute("usuario", null);
+                                request.getSession().setAttribute("idusuario", null);
                             }
                             response.sendRedirect("index.jsp");
                             cli = null;
@@ -90,11 +93,13 @@ public class SrvCliente extends HttpServlet {
                    ClienteBean cli = new ClienteBean();
                    cli = dao.logar(request.getParameter("email"), request.getParameter("senha"));
                    request.getSession().setAttribute("usuario", cli.getNome());
+                   request.getSession().setAttribute("idusuario", cli.getId());
                    response.sendRedirect("index.jsp");
                 } else {
                     
                     request.getSession().setAttribute("mensagemlogin", "Usuário ou senha ínvalidos");
                     request.getSession().setAttribute("usuario", null);
+                    request.getSession().setAttribute("idusuario", null);
                     response.sendRedirect("index.jsp");
                 }
             }catch(Exception ex){
@@ -108,6 +113,7 @@ public class SrvCliente extends HttpServlet {
             if(request.getParameter("btnSair") !=null){
             try{
                 request.getSession().setAttribute("usuario", null);
+                request.getSession().setAttribute("idusuario", null);
                 response.sendRedirect("index.jsp");
             }catch(Exception ex){
                     msg = "Erro ao logar." +

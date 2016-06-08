@@ -40,6 +40,61 @@ public class SrvPassagem extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            
+            //COMPRAR PASSAGEM
+            if(request.getParameter("btnComprar") != null) 
+            {
+                if(request.getSession().getAttribute("usuario") != null)
+                {
+                    //passagem ida
+                    if(request.getParameter("ida") != null) 
+                    {
+                        request.getSession().setAttribute("seleciona", null);                        
+                        request.getSession().setAttribute("selecionavolta", null);
+
+                         //passar parametros por sessao
+                        request.getSession().setAttribute("voo_ida", request.getParameter("ida"));
+                        //passagem volta
+                        if(request.getParameter("volta") != null) 
+                        {
+                            request.getSession().setAttribute("voo_volta", request.getParameter("volta"));
+                        }  else {
+                            request.getSession().setAttribute("voo_volta", null);
+                        }
+                        
+                       
+                        // e redireciona para a tela de seleção de passagens
+                        response.sendRedirect("selecionar.jsp");
+                        
+                        
+                    } else {
+                            //MENSAGEM NENHUMA PASSAGEM SELECIONADA
+                          String mensagem = ""
+                            + "   <div class=\"row-fluid top-bar clearfix\">\n" +
+"        <div class=\"container\">"
+                            + "<div class='alert alert-danger'>"
+                            + "Selecione pelo menos a passagem de ida!!!!"
+                            + "</div>"
+                            + "</div>"
+                            + "</div>";
+                    response.sendRedirect("index.jsp?msgcomprar="+mensagem);
+                    }
+                   
+                } else {
+                    String mensagem = ""
+                            + "   <div class=\"row-fluid top-bar clearfix\">\n" +
+"        <div class=\"container\">"
+                            + "<div class='alert alert-danger'>"
+                            + "Por favor efetue o cadastre e logue em sua conta para comprar!"
+                            + "</div>"
+                            + "</div>"
+                            + "</div>";
+                    response.sendRedirect("index.jsp?msgcomprar="+mensagem);
+                }
+                
+            }
+            
+            //PESQUISAR VOOS
             if (request.getParameter("btnpesquisar") != null) {
 
                 
@@ -105,6 +160,11 @@ public class SrvPassagem extends HttpServlet {
                                 } 
 
                                 request.getSession().setAttribute("conteudoida", conteudo);
+                                request.getSession().setAttribute("pesq_origem", origemida);
+                                request.getSession().setAttribute("pesq_destino", destinoida);
+                                request.getSession().setAttribute("pesq_start", startida);
+                                request.getSession().setAttribute("pesq_end", null);
+                                   
                             } else {
                                 request.getSession().setAttribute("conteudoida", "<tr><td colspan='6'>Não há voos nessa data</td></tr>");
                             }
@@ -144,10 +204,6 @@ public class SrvPassagem extends HttpServlet {
                             msg += "Os aeroportos são iguais, selecione o destino diferente de origem<br />";
                         }
 
-                       
-                        
-                        
-
                         if (msg.equals("")) {
                             
                            //VALIDAR DATA 
@@ -166,6 +222,11 @@ public class SrvPassagem extends HttpServlet {
                                         + "                                <td width=\"20%\"><h4>R$ " + viv.getValoradulto()+ "</h4></td>\n"
                                         + "                            </tr>  ";
                             } 
+                            
+                            request.getSession().setAttribute("pesq_origem", origemidaevolta);
+                            request.getSession().setAttribute("pesq_destino", destinoidaevolta);
+                            request.getSession().setAttribute("pesq_start", start);
+                            request.getSession().setAttribute("pesq_end", end);
                             
                             request.getSession().setAttribute("conteudoida", conteudo);
                         } else {

@@ -120,9 +120,31 @@ only screen and (min-resolution: 192dpi) {
     
     <!-- /top-bar -->
     <!-- header -->
+    <% if(request.getParameter("msgcomprar") != null) { 
+        out.print(request.getParameter("msgcomprar"));
+    }                        
+    %>
     <div class="row-fluid top-bar clearfix">
         <div class="container">
-            <h3 class="pull-left" style="color:white">
+           
+             <% 
+              if(session.getAttribute("usuario") != null) {
+             %>
+            <form class="navbar-form pull-right" action="SrvCliente" method="POST">
+                <button type="submit"name="btnSair" class="btn button-custom">Sair [x]</button>
+            </form>
+             <% } else { %>
+            <form class="navbar-form navbar-right" action="SrvCliente" method="POST">
+            <div class="form-group">
+              <input type="text" placeholder="E-mail" name="email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Senha" name="senha" class="form-control">
+            </div>
+            <button type="submit"name="btnLogar" class="btn button-custom">Logar</button>
+          </form>
+            <% }  %>
+             <h3 class="pull-right" style="color:white">
                 <% 
                     if(session.getAttribute("usuario") != null) {
                         
@@ -151,20 +173,6 @@ only screen and (min-resolution: 192dpi) {
                             }
                         %>
             </h3>
-            <form class="navbar-form navbar-left" action="SrvCliente" method="POST">
-         
-            <button type="submit"name="btnSair" class="btn button-custom">Sair</button>
-          </form>
-            <form class="navbar-form navbar-right" action="SrvCliente" method="POST">
-            <div class="form-group">
-              <input type="text" placeholder="E-mail" name="email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Senha" name="senha" class="form-control">
-            </div>
-            <button type="submit"name="btnLogar" class="btn button-custom">Logar</button>
-          </form>
-            
              
     </div>    
     </div>
@@ -200,17 +208,19 @@ only screen and (min-resolution: 192dpi) {
                                       <span class="glyphicon Passagens Aéreas Promocionais"></span>
                                       &nbsp;Passagens Aéreas</a>
                               </li>
-                              <li id="menu-item-2960" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2960">
-                                  <a title="Passagens Aéreas" href="index.jsp">
-                                      <span class="glyphicon Passagens Aéreas Promocionais"></span>
-                                      Logar</a>
-                              </li>
                               
+                              <% 
+                                    if(session.getAttribute("usuario") == null) {
+                                %>
+                             
                               <li id="menu-item-2960" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2960">
                                   <a title="Cadastrar" href="#" data-toggle="modal" data-target="#cadastrar">
                                       <span class="glyphicon Passagens Aéreas Promocionais"></span>
                                       Cadastre-se</a>
                               </li>
+                              <% 
+                                    }
+                                %>
 </ul></div>                        </div><!-- /.container-fluid -->
                     </nav>
                 </div>
@@ -254,7 +264,7 @@ only screen and (min-resolution: 192dpi) {
                         <div class="col-sm-6">
                             <p class="contact-form-phone">
                                 <label for="email">E-mail: <span class="required" aria-required="true">*</span></label>
-                                <input required type="email" size="30" maxlength="15" value="" name="email" id="email" class="form-control" placeholder="E-mail">
+                                <input required type="email" size="30" value="" name="email" id="email" class="form-control" placeholder="E-mail">
                             </p>
                         </div>
                         
@@ -348,7 +358,10 @@ only screen and (min-resolution: 192dpi) {
                                                             if(lista!=null){
                                                                 for(AeroportoBean aero:lista){
                                                           %>
-                                                        <option value="<%=aero.getId()%>"><%=aero.getCidade()%></option>
+                                                        <option value="<%=aero.getId()%>" 
+                                                                <% 
+                            if(session.getAttribute("pesq_origem") !=null) {  if( Integer.parseInt(session.getAttribute("pesq_origem").toString()) == aero.getId()) { out.print("selected='selected'");} } %>
+                                                                ><%=aero.getCidade()%></option>
                                                         <%
                                                             }
                                                             }
@@ -365,7 +378,10 @@ only screen and (min-resolution: 192dpi) {
                                                             if(lista2!=null){
                                                                 for(AeroportoBean aero2:lista2){
                                                           %>
-                                                        <option value="<%=aero2.getId()%>"><%=aero2.getCidade()%></option>
+                                                        <option value="<%=aero2.getId()%>"
+                                                                 <% 
+                            if(session.getAttribute("pesq_destino") !=null) {  if(Integer.parseInt(session.getAttribute("pesq_destino").toString()) == aero2.getId()) { out.print("selected='selected'");} } %>
+                                                                ><%=aero2.getCidade()%></option>
                                                         <%
                                                             }
                                                             }
@@ -382,7 +398,8 @@ only screen and (min-resolution: 192dpi) {
                                                         <label>Ida</label>
 
                                                        <div class="input-group date">
-                                                            <input type="text" name="start" id="ddida" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                                            <input type="text" name="start" id="ddida" class="form-control" value=" <% 
+                            if(session.getAttribute("pesq_start") !=null) {  out.print(session.getAttribute("pesq_start")); } %>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                                           </div>
                                                     </div>
                                                 </div>
@@ -390,7 +407,8 @@ only screen and (min-resolution: 192dpi) {
                                                     <div class="form-group form-group-lg form-group-icon-left">
                                                         <label>Volta</label>
                                                         <div class="input-group date">
-                                                            <input type="text" name="end" id="ddvolta" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                                            <input type="text" name="end" id="ddvolta" class="form-control" value="<% 
+                            if(session.getAttribute("pesq_end") !=null) {  out.print(session.getAttribute("pesq_end")); } %>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                                           </div>
                                                         </div>
                                                 </div>
@@ -410,7 +428,10 @@ only screen and (min-resolution: 192dpi) {
                                                             if(lista3!=null){
                                                                 for(AeroportoBean aero3:lista3){
                                                           %>
-                                                        <option value="<%=aero3.getId()%>"><%=aero3.getCidade()%></option>
+                                                        <option value="<%=aero3.getId()%>"
+                                                                <% 
+                            if(session.getAttribute("pesq_origem") !=null) {  if( Integer.parseInt(session.getAttribute("pesq_origem").toString()) == aero3.getId()) { out.print("selected='selected'");} } %>
+                                                                ><%=aero3.getCidade()%></option>
                                                         <%
                                                             }
                                                             }
@@ -427,7 +448,11 @@ only screen and (min-resolution: 192dpi) {
                                                             if(lista4!=null){
                                                                 for(AeroportoBean aero4:lista3){
                                                           %>
-                                                        <option value="<%=aero4.getId()%>"><%=aero4.getCidade()%></option>
+                                                        <option value="<%=aero4.getId()%>"
+                                                                <% 
+                            if(session.getAttribute("pesq_destino") !=null) {  if(Integer.parseInt(session.getAttribute("pesq_destino").toString()) == aero4.getId()) { out.print("selected='selected'");} } %>
+                                                                
+                                                                ><%=aero4.getCidade()%></option>
                                                         <%
                                                             }
                                                             }
@@ -441,7 +466,8 @@ only screen and (min-resolution: 192dpi) {
                                                 <div class="form-group form-group-lg form-group-icon-left">
                                                     <label>Ida</label>
                                                     <div class="input-group date">
-                                                            <input  type="text" name="startida" id="ddstartida" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                                            <input  type="text" name="startida" id="ddstartida" class="form-control" value=" <% 
+                            if(session.getAttribute("pesq_start") !=null) {  out.print(session.getAttribute("pesq_start")); } %>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                                           </div>
                                                 </div>
                                             </div>
@@ -497,7 +523,7 @@ only screen and (min-resolution: 192dpi) {
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12">
-                <form action="#" method="POST">
+                <form action="SrvPassagem" method="POST">
                 <div class="row-fluid ">
                     <table class="table table-widget">
                         <thead>
